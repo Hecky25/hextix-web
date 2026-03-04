@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hextix Web Development</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & ROOT ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cyan:        #22D3EE;
+      --cyan-light:  #67E8F9;
+      --indigo:      #818CF8;
+      --grad:        linear-gradient(135deg, #22D3EE 0%, #818CF8 100%);
+      --grad-text:   linear-gradient(135deg, #22D3EE, #818CF8);
+      --dark:        #09090B;
+      --dark-2:      #111117;
+      --dark-3:      #18181E;
+      --white:       #FFFFFF;
+      --light:       #F8FAFC;
+      --gray:        #94A3B8;
+      --gray-light:  #E2E8F0;
+      --nav-height:  70px;
+      --radius:      12px;
+      --shadow:      0 4px 24px rgba(34,211,238,0.1);
+      --shadow-lg:   0 12px 40px rgba(34,211,238,0.18);
+      --transition:  0.25s ease;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Inter', sans-serif; color: var(--dark); background: var(--white); line-height: 1.65; }
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; line-height: 1.2; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: 'Inter', sans-serif; }
+    section[id] { scroll-margin-top: var(--nav-height); }
+
+    /* ===== UTILITY ===== */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .grad-text {
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: all var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+    .btn-grad {
+      background: var(--grad);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(129,140,248,0.35);
+    }
+    .btn-grad:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(129,140,248,0.45);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.35);
+    }
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-2px);
+    }
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+    }
+    .btn-outline-dark:hover {
+      background: var(--blue);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--gray);
+      max-width: 640px;
+      line-height: 1.7;
+    }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(13,13,31,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand-icon {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+    .nav-brand-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: color var(--transition), background var(--transition);
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.07); }
+    .nav-cta { margin-left: 12px; }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 6px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-height);
+      left: 0; right: 0;
+      background: var(--dark-2);
+      z-index: 999;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 13px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: color var(--transition), background var(--transition);
+    }
+    .mobile-menu a:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+
+    /* ===== HERO ===== */
+    #home {
+      background: var(--dark);
+      padding: calc(var(--nav-height) + 80px) 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #home::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(34,211,238,0.18) 0%, rgba(129,140,248,0.1) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-wordmark {
+      margin: 0 auto 36px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-wordmark-main {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .hero-wordmark-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+    #home h1 {
+      font-size: 3.4rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 24px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.75;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      margin-top: 72px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ===== ABOUT ===== */
+    #about {
+      background: var(--light);
+      padding: 96px 24px;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .about-features {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .feature-text h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .feature-text p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+    .about-visual {
+      background: var(--dark);
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(129,140,248,0.25) 0%, transparent 70%);
+    }
+    .about-visual-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 20px;
+    }
+    .niche-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .niche-tag {
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .niche-tag.active {
+      background: var(--grad);
+      color: var(--white);
+    }
+    .niche-tag.soon {
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .about-visual-note {
+      margin-top: 28px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+    }
+
+    /* ===== VERTICALS ===== */
+    #verticals {
+      background: var(--white);
+      padding: 96px 24px;
+    }
+    .verticals-header { margin-bottom: 56px; }
+    .verticals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .vertical-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--gray-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .vertical-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+    .vertical-card.active { border-color: transparent; box-shadow: var(--shadow); }
+    .vertical-card-top {
+      padding: 32px;
+      background: var(--grad);
+      position: relative;
+      overflow: hidden;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .vertical-card-top::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .vertical-card.soon .vertical-card-top {
+      background: linear-gradient(135deg, #1A1A35 0%, #252540 100%);
+      filter: none;
+    }
+    .vertical-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+    .vertical-badge.live { background: rgba(255,255,255,0.2); color: var(--white); }
+    .vertical-badge.coming { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.4); }
+    .vertical-card-top h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--white);
+      position: relative;
+    }
+    .vertical-card-top p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      margin-top: 6px;
+      position: relative;
+    }
+    .vertical-card-body {
+      padding: 28px 32px;
+      background: var(--white);
+    }
+    .vertical-card.soon .vertical-card-body { background: #FAFAFA; }
+    .vertical-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .vertical-features li {
+      font-size: 0.88rem;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .vertical-features li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--grad);
+      flex-shrink: 0;
+    }
+    .vertical-card.soon .vertical-features li { color: #C0C0C0; }
+    .vertical-card.soon .vertical-features li::before { background: #C0C0C0; }
+    .lock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #C0C0C0;
+      font-weight: 600;
+    }
+
+    /* ===== CASE STUDIES ===== */
+    #work {
+      background: var(--dark);
+      padding: 96px 24px;
+    }
+    #work .section-title { color: var(--white); }
+    #work .section-sub { color: rgba(255,255,255,0.5); }
+    .case-study-card {
+      background: var(--dark-3);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-top: 48px;
+    }
+    .cs-header {
+      padding: 40px 48px;
+      background: linear-gradient(135deg, rgba(34,211,238,0.25) 0%, rgba(129,140,248,0.25) 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .cs-tag {
+      display: inline-block;
+      padding: 5px 14px;
+      background: var(--grad);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .cs-header h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .cs-header p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.55);
+      max-width: 480px;
+    }
+    .cs-body {
+      padding: 40px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .cs-features-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 20px;
+    }
+    .cs-feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cs-feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+    }
+    .cs-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--grad);
+      flex-shrink: 0;
+      margin-top: 6px;
+      background: linear-gradient(135deg, #4361EE, #7C3AED);
+    }
+    .cs-preview {
+      background: var(--dark-2);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .cs-preview-bar {
+      background: rgba(255,255,255,0.05);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .cs-preview-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .cs-preview-url {
+      flex: 1;
+      background: rgba(255,255,255,0.07);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+      margin-left: 8px;
+    }
+    .cs-preview-content {
+      padding: 24px;
+    }
+    .cs-mock-hero {
+      background: linear-gradient(135deg, #2C1A0E 0%, #3d2614 100%);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .cs-mock-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .cs-mock-sub {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .cs-mock-gold {
+      display: inline-block;
+      background: #B8943F;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    .cs-mock-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .cs-mock-section {
+      background: rgba(255,255,255,0.04);
+      border-radius: 5px;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.35);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== PROCESS ===== */
+    #process {
+      background: var(--light);
+      padding: 96px 24px;
+    }
+    .process-header { margin-bottom: 64px; }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(12.5% + 14px);
+      right: calc(12.5% + 14px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      opacity: 0.25;
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin: 0 auto 20px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 16px rgba(129,140,248,0.35);
+    }
+    .step h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .step p {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--white);
+      padding: 96px 24px;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .contact-info { }
+    .contact-info h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .contact-info p {
+      font-size: 1rem;
+      color: var(--gray);
+      line-height: 1.75;
+      margin-bottom: 32px;
+    }
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .contact-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .contact-detail span {
+      font-size: 0.95rem;
+      color: var(--dark);
+      font-weight: 500;
+    }
+    .contact-form-card {
+      background: var(--light);
+      border-radius: 16px;
+      padding: 40px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--dark);
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid var(--gray-light);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--dark);
+      background: var(--white);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+      width: 100%;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(34,211,238,0.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .confirm-msg {
+      display: none;
+      background: #e8f5e9;
+      border: 1.5px solid #4caf50;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-top: 16px;
+      color: #2d7a40;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--dark);
+      padding: 60px 24px 32px;
+    }
+    .footer-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-logo img {
+      height: 56px;
+      width: auto;
+      margin-bottom: 16px;
+    }
+    .footer-logo p {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      max-width: 280px;
+    }
+    .footer-col h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul a {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.88rem;
+      transition: color var(--transition);
+    }
+    .footer-col ul a:hover { color: var(--white); }
+    .footer-divider {
+      max-width: 1140px;
+      margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-divider p { color: rgba(255,255,255,0.3); font-size: 0.82rem; }
+    .footer-brand-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer-brand-tag span {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 960px) {
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .verticals-grid { grid-template-columns: 1fr 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-steps::before { display: none; }
+      .cs-body { grid-template-columns: 1fr; gap: 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-logo { grid-column: 1 / -1; }
+      #home h1 { font-size: 2.6rem; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .verticals-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      #home h1 { font-size: 2rem; }
+      .hero-stats { gap: 28px; }
+      .cs-header { padding: 28px; }
+      .cs-body { padding: 28px; }
+      .cs-mock-sections { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#home">
+      <img src="logo.png" alt="Hextix Web Development" style="height:56px; width:auto; object-fit:contain;" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#verticals">Verticals</a></li>
+      <li><a href="#work">Our Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-grad nav-cta" style="font-size:0.88rem; padding:9px 20px;">Get Started</a>
+    <button class="hamburger" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about">About</a>
+  <a href="#verticals">Verticals</a>
+  <a href="#work">Our Work</a>
+  <a href="#process">Process</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section id="home">
+  <div class="container">
+    <img src="logo.png" alt="Hextix Web Development" style="height:320px; width:auto; margin:0 auto 32px; display:block; object-fit:contain;" />
+    <h1>Niche websites built for<br /><span class="grad-text">the communities people love.</span></h1>
+    <p class="hero-sub">
+      Hextix builds purpose-driven websites for sports clubs, community organizations, and niche businesses. Not templates. Not generic. Built for your world.
+    </p>
+    <div class="hero-btns">
+      <a href="#work" class="btn btn-grad">See Our Work</a>
+      <a href="#contact" class="btn btn-outline">Get a Quote</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">5 Days</div>
+        <div class="stat-label">Avg. Turnaround</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Niche Focused</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">$0</div>
+        <div class="stat-label">Hosting Overhead</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">We specialize.<br />We don't generalize.</h2>
+        <p class="section-sub">
+          Generic web agencies build generic websites. Hextix goes deep into specific communities — learning the sport, the culture, the lingo — and builds sites that actually resonate with your audience.
+        </p>
+        <div class="about-features">
+          <div class="feature-item">
+            <div class="feature-icon" style="font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:700; color:var(--white);">01</div>
+            <div class="feature-text">
+              <h4>Niche-First Design</h4>
+              <p>Every site is built from the ground up for a specific community. Your members will feel it immediately.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon" style="font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:700; color:var(--white);">02</div>
+            <div class="feature-text">
+              <h4>Fast & Lightweight</h4>
+              <p>No bloated page builders. Clean code, fast load times, and smooth on every device.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon" style="font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:700; color:var(--white);">03</div>
+            <div class="feature-text">
+              <h4>Ongoing Support</h4>
+              <p>Monthly retainer keeps your site fresh. Events, updates, new photos — just ask.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-visual-label">Active Verticals</div>
+        <div class="niche-tags">
+          <span class="niche-tag active">Pickleball</span>
+          <span class="niche-tag soon">Soccer Clubs</span>
+          <span class="niche-tag soon">Tennis</span>
+          <span class="niche-tag soon">CrossFit Gyms</span>
+          <span class="niche-tag soon">Swim Clubs</span>
+          <span class="niche-tag soon">Community Orgs</span>
+          <span class="niche-tag soon">Golf Clubs</span>
+          <span class="niche-tag soon">More coming...</span>
+        </div>
+        <p class="about-visual-note">We launch one vertical at a time, perfecting our expertise before expanding. Currently accepting pickleball club clients.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VERTICALS ===== -->
+<section id="verticals">
+  <div class="container">
+    <div class="verticals-header">
+      <span class="section-label">Our Verticals</span>
+      <h2 class="section-title">Built for the communities<br />that bring people together.</h2>
+      <p class="section-sub">Each vertical is a specialized product line with deep niche knowledge, purpose-built features, and a dedicated brand.</p>
+    </div>
+    <div class="verticals-grid">
+
+      <!-- Court & Code — ACTIVE -->
+      <div class="vertical-card active">
+        <div class="vertical-card-top">
+          <span class="vertical-badge live">Now Available</span>
+          <h3>Court &amp; Code</h3>
+          <p>Pickleball clubs &amp; communities</p>
+        </div>
+        <div class="vertical-card-body">
+          <ul class="vertical-features">
+            <li>Court Reserve booking integration</li>
+            <li>Event &amp; tournament management</li>
+            <li>Instructor profiles &amp; lesson booking</li>
+            <li>Sponsor &amp; donation pages</li>
+            <li>Mobile-responsive design</li>
+          </ul>
+          <a href="#work" class="btn btn-grad" style="width:100%; text-align:center;">View Case Study</a>
+        </div>
+      </div>
+
+      <!-- Coming Soon 1 -->
+      <div class="vertical-card soon">
+        <div class="vertical-card-top">
+          <span class="vertical-badge coming">Coming Soon</span>
+          <h3>More Niches</h3>
+          <p>Sports clubs &amp; organizations</p>
+        </div>
+        <div class="vertical-card-body">
+          <ul class="vertical-features">
+            <li>League &amp; schedule management</li>
+            <li>Team rosters &amp; stats</li>
+            <li>Online registration &amp; payments</li>
+            <li>Sponsor integration</li>
+            <li>Community news &amp; updates</li>
+          </ul>
+          <span class="lock-badge">— In Development</span>
+        </div>
+      </div>
+
+      <!-- Coming Soon 2 -->
+      <div class="vertical-card soon">
+        <div class="vertical-card-top">
+          <span class="vertical-badge coming">Coming Soon</span>
+          <h3>Community Orgs</h3>
+          <p>HOAs, nonprofits &amp; local groups</p>
+        </div>
+        <div class="vertical-card-body">
+          <ul class="vertical-features">
+            <li>Member portals &amp; directories</li>
+            <li>Event calendars &amp; RSVPs</li>
+            <li>Donation &amp; fundraising tools</li>
+            <li>Newsletter integrations</li>
+            <li>Board &amp; governance pages</li>
+          </ul>
+          <span class="lock-badge">— In Development</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== CASE STUDIES ===== -->
+<section id="work">
+  <div class="container">
+    <span class="section-label" style="color:rgba(255,255,255,0.5); -webkit-text-fill-color: rgba(255,255,255,0.5); background:none;">Our Work</span>
+    <h2 class="section-title">Real sites. Real results.</h2>
+    <p class="section-sub">See how we've helped pickleball clubs establish a professional online presence that their members actually use.</p>
+
+    <div class="case-study-card">
+      <div class="cs-header">
+        <div>
+          <span class="cs-tag">Pickleball · Court &amp; Code</span>
+          <h3>Maplecrest Pickleball</h3>
+          <p>A full-featured community club website with Court Reserve integration, private lesson booking, event management, and sponsor pages.</p>
+        </div>
+        <a href="https://idyllic-puppy-714a03.netlify.app" target="_blank" rel="noopener noreferrer" class="btn btn-grad">View Live Demo →</a>
+      </div>
+      <div class="cs-body">
+        <div>
+          <div class="cs-features-title">What's Included</div>
+          <ul class="cs-feature-list">
+            <li><span class="cs-dot"></span>Real-time court availability via Court Reserve embed</li>
+            <li><span class="cs-dot"></span>Group class listings with instructor profiles</li>
+            <li><span class="cs-dot"></span>Private lesson booking with availability calendar</li>
+            <li><span class="cs-dot"></span>Upcoming events &amp; tournament listings</li>
+            <li><span class="cs-dot"></span>Sponsor showcase &amp; become-a-sponsor section</li>
+            <li><span class="cs-dot"></span>Donation page with PayPal integration</li>
+            <li><span class="cs-dot"></span>Board of Directors &amp; court guidelines</li>
+            <li><span class="cs-dot"></span>TeamReach app integration for community updates</li>
+            <li><span class="cs-dot"></span>Fully mobile responsive</li>
+          </ul>
+        </div>
+        <div>
+          <div class="cs-preview">
+            <div class="cs-preview-bar">
+              <div class="cs-preview-dot" style="background:#ff5f57;"></div>
+              <div class="cs-preview-dot" style="background:#febc2e;"></div>
+              <div class="cs-preview-dot" style="background:#28c840;"></div>
+              <div class="cs-preview-url">maplecrestpickleball.com</div>
+            </div>
+            <div class="cs-preview-content">
+              <div class="cs-mock-hero">
+                <div class="cs-mock-title">Maplecrest Pickleball</div>
+                <div class="cs-mock-sub">Welcome to the community</div>
+                <div class="cs-mock-gold">Reserve a Court</div>
+              </div>
+              <div class="cs-mock-sections">
+                <div class="cs-mock-section">Group Classes</div>
+                <div class="cs-mock-section">Private Lessons</div>
+                <div class="cs-mock-section">Events</div>
+                <div class="cs-mock-section">Sponsors</div>
+                <div class="cs-mock-section">Donate</div>
+                <div class="cs-mock-section">Contact</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROCESS ===== -->
+<section id="process">
+  <div class="container">
+    <div class="process-header">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">From idea to live in days.</h2>
+      <p class="section-sub">A streamlined process that gets your club online fast, without the back-and-forth of a traditional agency.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Submit Your Info</h4>
+        <p>Fill out our simple intake form with your club name, logo, and what you need on the site.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>We Build It</h4>
+        <p>Your site is built within 48 hours using our proven niche-specific framework.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Review &amp; Refine</h4>
+        <p>You review the live preview, request any changes, and we finalize until you love it.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Go Live</h4>
+        <p>We connect your domain and launch. Ongoing updates handled through your monthly retainer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="section-title">Ready to get your<br /><span class="grad-text">club online?</span></h2>
+        <p>Fill out the form and we'll get back to you within 24 hours. Whether you're ready to start or just have questions, we're happy to talk.</p>
+        <div class="contact-detail">
+          <div class="contact-icon" style="font-family:'Space Grotesk',sans-serif; font-size:0.8rem; font-weight:700; color:var(--white);">@</div>
+          <span>hextixwebco@outlook.com</span>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon" style="font-family:'Space Grotesk',sans-serif; font-size:0.8rem; font-weight:700; color:var(--white);">24h</div>
+          <span>Response within 24 hours</span>
+        </div>
+      </div>
+      <div class="contact-form-card">
+        <form id="contact-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="con-first">First Name *</label>
+              <input type="text" id="con-first" name="firstName" required placeholder="Jane" />
+            </div>
+            <div class="form-group">
+              <label for="con-last">Last Name *</label>
+              <input type="text" id="con-last" name="lastName" required placeholder="Smith" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="con-email">Email *</label>
+            <input type="email" id="con-email" name="email" required placeholder="jane@example.com" />
+          </div>
+          <div class="form-group">
+            <label for="con-club">Club or Organization Name</label>
+            <input type="text" id="con-club" name="club" placeholder="Maplecrest Pickleball Club" />
+          </div>
+          <div class="form-group">
+            <label for="con-message">Tell Us About Your Project *</label>
+            <textarea id="con-message" name="message" required placeholder="What does your club need? Any specific features in mind?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-grad" style="width:100%;">Send Message</button>
+          <div class="confirm-msg" id="contact-confirm">
+            Thanks! We'll be in touch within 24 hours.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="logo.png" alt="Hextix Web Development" style="height:56px; width:auto; margin-bottom:16px; object-fit:contain;" />
+      <p>Niche-focused web design for the communities people are passionate about.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#verticals">Verticals</a></li>
+        <li><a href="#work">Our Work</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Verticals</h4>
+      <ul>
+        <li><a href="#work">Court &amp; Code — Pickleball</a></li>
+        <li><a href="#verticals" style="color:rgba(255,255,255,0.3);">More Coming Soon</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-divider">
+    <p>&copy; 2026 Hextix Web Development. All rights reserved.</p>
+    <span class="footer-brand-tag">Powered by <span>Hextix</span></span>
+  </div>
+</footer>
+
+<!-- ===== JS ===== -->
+<script>
+(function () {
+  // Hamburger
+  const hamburger = document.querySelector('.hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', function () {
+    const exp = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.setAttribute('aria-expanded', String(!exp));
+    mobileMenu.classList.toggle('open', !exp);
+  });
+  mobileMenu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // Contact form
+  const form = document.getElementById('contact-form');
+  const confirm = document.getElementById('contact-confirm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+    form.querySelectorAll('[required]').forEach(function (f) {
+      if (!f.value.trim()) {
+        valid = false;
+        f.style.borderColor = '#ef4444';
+        f.addEventListener('input', function () { f.style.borderColor = ''; }, { once: true });
+      }
+    });
+    if (!valid) return;
+    const data = new FormData(form);
+    const lines = [];
+    data.forEach(function (v, k) {
+      lines.push(k + ': ' + v);
+    });
+    const subject = encodeURIComponent('Hextix — New Project Inquiry');
+    const body = encodeURIComponent(lines.join('\n'));
+    window.location.href = 'mailto:hextixwebco@outlook.com?subject=' + subject + '&body=' + body;
+    confirm.style.display = 'block';
+    form.querySelectorAll('input, textarea').forEach(function (el) { el.value = ''; });
+    setTimeout(function () { confirm.style.display = 'none'; }, 8000);
+  });
+})();
+</script>
+
+</body>
+</html>
