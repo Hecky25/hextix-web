@@ -524,6 +524,19 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cs-header-bg-logo {
+      position: absolute;
+      left: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 130px;
+      width: auto;
+      opacity: 0.1;
+      pointer-events: none;
+      user-select: none;
     }
     .cs-tag {
       display: inline-block;
@@ -880,6 +893,101 @@
       font-weight: 700;
     }
 
+    /* ===== DROPDOWN ===== */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > a::after {
+      content: ' ▾';
+      font-size: 0.7em;
+      opacity: 0.6;
+    }
+    /* invisible bridge so mouse can travel from link to menu without losing hover */
+    .nav-dropdown::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 14px;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dark-2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 6px;
+      min-width: 230px;
+      z-index: 200;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    }
+    .nav-dropdown:hover .dropdown-menu { display: block; }
+    .dropdown-item {
+      display: block;
+      padding: 10px 14px;
+      border-radius: 7px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+
+    /* ===== PAGE SECTIONS ===== */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* ===== WORK TILES ===== */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .work-tile {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--dark-3);
+      transition: transform var(--transition), box-shadow var(--transition);
+      text-decoration: none;
+      display: block;
+    }
+    .work-tile:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .work-tile-visual {
+      background: #FFFFFF;
+      padding: 56px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+    }
+    .work-tile-visual img {
+      max-height: 180px;
+      max-width: 100%;
+      width: auto;
+      object-fit: contain;
+    }
+    .work-tile-info {
+      padding: 22px 28px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .work-tile-info h3 {
+      font-size: 1.1rem;
+      color: var(--white);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 960px) {
       .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -901,9 +1009,7 @@
       .footer-inner { grid-template-columns: 1fr; gap: 32px; }
       #home h1 { font-size: 2rem; }
       .hero-stats { gap: 28px; }
-      .cs-header { padding: 28px; }
-      .cs-body { padding: 28px; }
-      .cs-mock-sections { grid-template-columns: 1fr 1fr; }
+      .work-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -912,17 +1018,20 @@
 <!-- ===== NAV ===== -->
 <nav class="nav">
   <div class="nav-inner">
-    <a class="nav-brand" href="#home">
+    <a class="nav-brand" href="#" onclick="switchPage('home');return false;">
       <img src="logo.png" alt="Hextix Web Development" style="height:56px; width:auto; object-fit:contain;" />
     </a>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#verticals">Verticals</a></li>
-      <li><a href="#work">Our Work</a></li>
-      <li><a href="#process">Process</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li class="nav-dropdown">
+        <a href="#" onclick="switchPage('work');return false;">Our Work</a>
+        <div class="dropdown-menu">
+          <a href="#" onclick="switchPage('court-code');return false;" class="dropdown-item">Court &amp; Code — Racquet Sports</a>
+        </div>
+      </li>
+      <li><a href="#" onclick="switchPage('process');return false;">Process</a></li>
+      <li><a href="#" onclick="switchPage('contact');return false;">Contact</a></li>
     </ul>
-    <a href="#contact" class="btn btn-grad nav-cta" style="font-size:0.88rem; padding:9px 20px;">Get Started</a>
+    <a href="#" onclick="switchPage('contact');return false;" class="btn btn-grad nav-cta" style="font-size:0.88rem; padding:9px 20px;">Get Started</a>
     <button class="hamburger" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
@@ -931,12 +1040,14 @@
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#about">About</a>
-  <a href="#verticals">Verticals</a>
-  <a href="#work">Our Work</a>
-  <a href="#process">Process</a>
-  <a href="#contact">Contact</a>
+  <a href="#" onclick="switchPage('work');return false;">Our Work</a>
+  <a href="#" onclick="switchPage('court-code');return false;" style="padding-left:28px; font-size:0.88rem; opacity:0.7;">↳ Court &amp; Code — Racquet Sports</a>
+  <a href="#" onclick="switchPage('process');return false;">Process</a>
+  <a href="#" onclick="switchPage('contact');return false;">Contact</a>
 </div>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page-section active" id="page-home">
 
 <!-- ===== HERO ===== -->
 <section id="home">
@@ -947,8 +1058,8 @@
       Hextix builds purpose-driven websites for sports clubs, community organizations, and niche businesses. Not templates. Not generic. Built for your world.
     </p>
     <div class="hero-btns">
-      <a href="#work" class="btn btn-grad">See Our Work</a>
-      <a href="#contact" class="btn btn-outline">Get a Quote</a>
+      <a href="#" onclick="switchPage('work');return false;" class="btn btn-grad">See Our Work</a>
+      <a href="#" onclick="switchPage('contact');return false;" class="btn btn-outline">Get a Quote</a>
     </div>
     <div class="hero-stats">
       <div class="stat-item">
@@ -1019,137 +1130,94 @@
   </div>
 </section>
 
-<!-- ===== VERTICALS ===== -->
-<section id="verticals">
-  <div class="container">
-    <div class="verticals-header">
-      <span class="section-label">Our Verticals</span>
-      <h2 class="section-title">Built for the communities<br />that bring people together.</h2>
-      <p class="section-sub">Each vertical is a specialized product line with deep niche knowledge, purpose-built features, and a dedicated brand.</p>
-    </div>
-    <div class="verticals-grid">
+</div><!-- /page-home -->
 
-      <!-- Court & Code — ACTIVE -->
-      <div class="vertical-card active">
-        <div class="vertical-card-top">
-          <span class="vertical-badge live">Now Available</span>
-          <h3>Court &amp; Code</h3>
-          <p>Pickleball clubs &amp; communities</p>
-        </div>
-        <div class="vertical-card-body">
-          <ul class="vertical-features">
-            <li>Court Reserve booking integration</li>
-            <li>Event &amp; tournament management</li>
-            <li>Instructor profiles &amp; lesson booking</li>
-            <li>Sponsor &amp; donation pages</li>
-            <li>Mobile-responsive design</li>
-          </ul>
-          <a href="#work" class="btn btn-grad" style="width:100%; text-align:center;">View Case Study</a>
-        </div>
-      </div>
 
-      <!-- Coming Soon 1 -->
-      <div class="vertical-card soon">
-        <div class="vertical-card-top">
-          <span class="vertical-badge coming">Coming Soon</span>
-          <h3>More Niches</h3>
-          <p>Sports clubs &amp; organizations</p>
-        </div>
-        <div class="vertical-card-body">
-          <ul class="vertical-features">
-            <li>League &amp; schedule management</li>
-            <li>Team rosters &amp; stats</li>
-            <li>Online registration &amp; payments</li>
-            <li>Sponsor integration</li>
-            <li>Community news &amp; updates</li>
-          </ul>
-          <span class="lock-badge">— In Development</span>
-        </div>
-      </div>
-
-      <!-- Coming Soon 2 -->
-      <div class="vertical-card soon">
-        <div class="vertical-card-top">
-          <span class="vertical-badge coming">Coming Soon</span>
-          <h3>Community Orgs</h3>
-          <p>HOAs, nonprofits &amp; local groups</p>
-        </div>
-        <div class="vertical-card-body">
-          <ul class="vertical-features">
-            <li>Member portals &amp; directories</li>
-            <li>Event calendars &amp; RSVPs</li>
-            <li>Donation &amp; fundraising tools</li>
-            <li>Newsletter integrations</li>
-            <li>Board &amp; governance pages</li>
-          </ul>
-          <span class="lock-badge">— In Development</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===== CASE STUDIES ===== -->
+<!-- ===== WORK PAGE ===== -->
+<div class="page-section" id="page-work">
 <section id="work">
   <div class="container">
-    <span class="section-label" style="color:rgba(255,255,255,0.5); -webkit-text-fill-color: rgba(255,255,255,0.5); background:none;">Our Work</span>
-    <h2 class="section-title">Real sites. Real results.</h2>
-    <p class="section-sub">See how we've helped pickleball clubs establish a professional online presence that their members actually use.</p>
-
-    <div class="case-study-card">
-      <div class="cs-header">
-        <div>
-          <span class="cs-tag">Pickleball · Court &amp; Code</span>
-          <h3>Maplecrest Pickleball</h3>
-          <p>A full-featured community club website with Court Reserve integration, private lesson booking, event management, and sponsor pages.</p>
-        </div>
-        <a href="https://idyllic-puppy-714a03.netlify.app" target="_blank" rel="noopener noreferrer" class="btn btn-grad">View Live Demo →</a>
+    <span class="section-label">Our Work</span>
+    <h2 class="section-title">We don't build generic sites.<br /><span class="grad-text">We build for your world.</span></h2>
+    <p class="section-sub" style="max-width:600px;">Hextix goes deep into specific sports communities — learning the culture, the features that matter, and the way members communicate. Every site we build is purpose-built for one niche, not adapted from a template.</p>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:56px;">
+      <div style="background:var(--dark-3); border-radius:var(--radius); padding:32px; border:1px solid rgba(255,255,255,0.07);">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:0.78rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--cyan); margin-bottom:14px;">Niche-First Design</div>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.93rem; line-height:1.7;">Built from scratch for a specific sport and community. Your members will feel it the moment they land on the page.</p>
       </div>
-      <div class="cs-body">
-        <div>
-          <div class="cs-features-title">What's Included</div>
-          <ul class="cs-feature-list">
-            <li><span class="cs-dot"></span>Real-time court availability via Court Reserve embed</li>
-            <li><span class="cs-dot"></span>Group class listings with instructor profiles</li>
-            <li><span class="cs-dot"></span>Private lesson booking with availability calendar</li>
-            <li><span class="cs-dot"></span>Upcoming events &amp; tournament listings</li>
-            <li><span class="cs-dot"></span>Sponsor showcase &amp; become-a-sponsor section</li>
-            <li><span class="cs-dot"></span>Donation page with PayPal integration</li>
-            <li><span class="cs-dot"></span>Board of Directors &amp; court guidelines</li>
-            <li><span class="cs-dot"></span>TeamReach app integration for community updates</li>
-            <li><span class="cs-dot"></span>Fully mobile responsive</li>
-          </ul>
-        </div>
-        <div>
-          <div class="cs-preview">
-            <div class="cs-preview-bar">
-              <div class="cs-preview-dot" style="background:#ff5f57;"></div>
-              <div class="cs-preview-dot" style="background:#febc2e;"></div>
-              <div class="cs-preview-dot" style="background:#28c840;"></div>
-              <div class="cs-preview-url">maplecrestpickleball.com</div>
-            </div>
-            <div class="cs-preview-content">
-              <div class="cs-mock-hero">
-                <div class="cs-mock-title">Maplecrest Pickleball</div>
-                <div class="cs-mock-sub">Welcome to the community</div>
-                <div class="cs-mock-gold">Reserve a Court</div>
-              </div>
-              <div class="cs-mock-sections">
-                <div class="cs-mock-section">Group Classes</div>
-                <div class="cs-mock-section">Private Lessons</div>
-                <div class="cs-mock-section">Events</div>
-                <div class="cs-mock-section">Sponsors</div>
-                <div class="cs-mock-section">Donate</div>
-                <div class="cs-mock-section">Contact</div>
-              </div>
-            </div>
+      <div style="background:var(--dark-3); border-radius:var(--radius); padding:32px; border:1px solid rgba(255,255,255,0.07);">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:0.78rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--cyan); margin-bottom:14px;">Live in 5 Days</div>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.93rem; line-height:1.7;">No drawn-out timelines. Clean code, fast delivery, and a live site your club can be proud of within a week.</p>
+      </div>
+      <div style="background:var(--dark-3); border-radius:var(--radius); padding:32px; border:1px solid rgba(255,255,255,0.07);">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:0.78rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--cyan); margin-bottom:14px;">Ongoing Support</div>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.93rem; line-height:1.7;">Monthly retainer keeps your site current. Events, roster changes, new photos — just send us a message.</p>
+      </div>
+    </div>
+    <div style="margin-top:56px; padding-top:48px; border-top:1px solid rgba(255,255,255,0.07);">
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:0.78rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:24px;">Active Verticals</div>
+      <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+        <a href="#" onclick="switchPage('court-code');return false;" style="display:inline-flex; align-items:center; gap:10px; background:var(--dark-3); border:1px solid rgba(34,211,238,0.3); border-radius:10px; padding:14px 22px; text-decoration:none; transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(34,211,238,0.7)'" onmouseout="this.style.borderColor='rgba(34,211,238,0.3)'">
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; color:var(--white); font-size:0.95rem;">Court &amp; Code</div>
+            <div style="font-size:0.78rem; color:rgba(255,255,255,0.45);">Racquet Sports</div>
+          </div>
+          <span style="margin-left:8px; font-size:0.8rem; background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:600;">View →</span>
+        </a>
+        <div style="display:inline-flex; align-items:center; gap:10px; background:var(--dark-3); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:14px 22px; opacity:0.4;">
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; color:var(--white); font-size:0.95rem;">More Coming Soon</div>
+            <div style="font-size:0.78rem; color:rgba(255,255,255,0.45);">In Development</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+</div><!-- /page-work -->
+
+<!-- ===== COURT & CODE PAGE ===== -->
+<div class="page-section" id="page-court-code">
+<section id="court-code" style="background:var(--dark); padding:96px 24px;">
+  <div class="container">
+    <img src="court-and-code-banner.png" alt="Court &amp; Code" style="max-width:520px; width:100%; display:block; margin:0 auto 24px; border-radius:12px; object-fit:contain;" />
+    <p style="text-align:center; color:rgba(255,255,255,0.5); font-size:1rem; margin-bottom:56px;">Our home court is pickleball — but we build for every racquet sport.</p>
+
+    <div class="work-grid">
+
+      <a href="https://idyllic-puppy-714a03.netlify.app" target="_blank" rel="noopener noreferrer" class="work-tile">
+        <div class="work-tile-visual">
+          <img src="maplecrest-logo.png" alt="Maplecrest Pickleball" />
+        </div>
+        <div class="work-tile-info">
+          <div>
+            <span class="cs-tag" style="margin-bottom:6px;">Court &amp; Code · Pickleball</span>
+            <h3>Maplecrest Pickleball</h3>
+          </div>
+          <span style="font-size:0.88rem; font-weight:600; background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; white-space:nowrap;">View Demo →</span>
+        </div>
+      </a>
+
+      <a href="https://lakesideraquet.netlify.app" target="_blank" rel="noopener noreferrer" class="work-tile">
+        <div class="work-tile-visual">
+          <img src="lakeside-logo.png" alt="Lakeside Racquet Club" />
+        </div>
+        <div class="work-tile-info">
+          <div>
+            <span class="cs-tag" style="margin-bottom:6px;">Court &amp; Code · Pickleball</span>
+            <h3>Lakeside Racquet Club</h3>
+          </div>
+          <span style="font-size:0.88rem; font-weight:600; background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; white-space:nowrap;">View Demo →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+</div><!-- /page-court-code -->
+
+<!-- ===== PROCESS PAGE ===== -->
+<div class="page-section" id="page-process">
 
 <!-- ===== PROCESS ===== -->
 <section id="process">
@@ -1168,7 +1236,7 @@
       <div class="step">
         <div class="step-num">2</div>
         <h4>We Build It</h4>
-        <p>Your site is built within 48 hours using our proven niche-specific framework.</p>
+        <p>Your site is built within 5 days using our proven niche-specific framework.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
@@ -1183,6 +1251,11 @@
     </div>
   </div>
 </section>
+
+</div><!-- /page-process -->
+
+<!-- ===== CONTACT PAGE ===== -->
+<div class="page-section" id="page-contact">
 
 <!-- ===== CONTACT ===== -->
 <section id="contact">
@@ -1235,6 +1308,8 @@
   </div>
 </section>
 
+</div><!-- /page-contact -->
+
 <!-- ===== FOOTER ===== -->
 <footer>
   <div class="footer-inner">
@@ -1245,18 +1320,18 @@
     <div class="footer-col">
       <h4>Quick Links</h4>
       <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#verticals">Verticals</a></li>
-        <li><a href="#work">Our Work</a></li>
-        <li><a href="#process">Process</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#" onclick="switchPage('home');return false;">Home</a></li>
+        <li><a href="#" onclick="switchPage('work');return false;">Our Work</a></li>
+        <li><a href="#" onclick="switchPage('verticals');return false;">Verticals</a></li>
+        <li><a href="#" onclick="switchPage('process');return false;">Process</a></li>
+        <li><a href="#" onclick="switchPage('contact');return false;">Contact</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Verticals</h4>
       <ul>
-        <li><a href="#work">Court &amp; Code — Pickleball</a></li>
-        <li><a href="#verticals" style="color:rgba(255,255,255,0.3);">More Coming Soon</a></li>
+        <li><a href="#" onclick="switchPage('court-code');return false;">Court &amp; Code — Racquet Sports</a></li>
+        <li style="color:rgba(255,255,255,0.3); font-size:0.88rem;">More coming soon</li>
       </ul>
     </div>
   </div>
@@ -1268,6 +1343,19 @@
 
 <!-- ===== JS ===== -->
 <script>
+function switchPage(target) {
+  document.querySelectorAll('.page-section').forEach(function (s) {
+    s.classList.remove('active');
+  });
+  var page = document.getElementById('page-' + target);
+  if (page) page.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // close mobile menu
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.querySelector('.hamburger').setAttribute('aria-expanded', 'false');
+}
+window.switchPage = switchPage;
+
 (function () {
   // Hamburger
   const hamburger = document.querySelector('.hamburger');
